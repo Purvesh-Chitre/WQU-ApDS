@@ -1,0 +1,121 @@
+import pandas as pd
+
+# Load CSV files into DataFrames
+df1 = pd.read_csv("data/mexico-real-estate-1.csv")
+df2 = pd.read_csv("data/mexico-real-estate-2.csv")
+df3 = pd.read_csv("data/mexico-real-estate-3.csv")
+
+# Print object type and shape for DataFrames
+print("df1 type:", type(df1))
+print("df1 shape:", df1.shape)
+print()
+print("df2 type:", type(df2))
+print("df2 shape:", df2.shape)
+print()
+print("df3 type:", type(df3))
+print("df3 shape:", df3.shape)
+
+# Print df1 shape
+df1.shape
+
+# Print df1 info
+df1.info()
+
+# Get output of df1 head
+df1.head()
+
+
+df1.info()
+
+
+# Drop null values from df1
+df1.dropna(inplace = True)
+
+
+df1["price_usd"].head()
+
+
+# Clean "price_usd" column in df1
+# Transforming price_usd from object to float
+df1["price_usd"] = (
+    df1["price_usd"]
+    .str.replace("$","",regex=False)
+    .str.replace(",","")
+    .astype(float)
+)
+
+
+# Print object type, shape, and head
+print("df1 type:", type(df1))
+print("df1 shape:", df1.shape)
+df1.head()
+
+
+df2.head()
+
+df2.dropna(inplace = True)
+
+df2.info()
+
+
+# Create a price_usd column
+df2["price_usd"] = (df2["price_mxn"] / 19).round(2)
+
+# Drop "price_mxn" column from df2
+df2.drop(columns = ["price_mxn"], inplace = True)
+
+# Print object type, shape, and head
+print("df2 type:", type(df2))
+print("df2 shape:", df2.shape)
+df2.head()
+
+
+df3.info()
+df3.head()
+
+
+# Drop null values from df3
+df3.dropna(inplace = True)
+
+# Create "lat" and "lon" columns for df3
+# Split lat-lon column
+df3[["lat", "lon"]] = df3["lat-lon"].str.split(",", expand = True)
+
+# Print object type, shape, and head
+print("df3 type:", type(df3))
+print("df3 shape:", df3.shape)
+df3.head()
+
+
+# Create "state" column from "place_with_parent_names" col
+df3["state"] = df3["place_with_parent_names"].str.split("|", expand = True)[2]
+
+# Dropping the columns "place_with_parent_names" and "lat-lon"
+df3.drop(columns = ["place_with_parent_names", "lat-lon"], inplace = True)
+
+df3.head()
+
+
+# Create "state" column for df3
+df3["state"] = ...
+
+# Drop "place_with_parent_names" and "lat-lon" from df3
+
+
+# Print object type, shape, and head
+print("df3 type:", type(df3))
+print("df3 shape:", df3.shape)
+df3.head()
+
+
+# Concatenate df1, df2, and df3
+df = pd.concat([df1, df2, df3])
+
+# Print object type, shape, and head
+print("df type:", type(df))
+print("df shape:", df.shape)
+df.head()
+
+
+# Save df
+df.to_csv("data/mexico-real-estate-clean.csv", index = False)
